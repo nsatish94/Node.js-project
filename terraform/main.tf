@@ -70,7 +70,7 @@ resource "aws_ecs_task_definition" "hello_world" {
   container_definitions = jsonencode([
     {
       name  = "hello-world"
-      image = "${191545124512.dkr.ecr.us-east-1.amazonaws.com/hello-world}"
+      image = "${191545124512.dkr.ecr.us-east-1.amazonaws.com/hello-world:latest}"
       portMappings = [
         {
           containerPort = 3000
