@@ -130,15 +130,6 @@ resource "aws_ecs_service" "main" {
   }
 }
 
-output "ecs_service_name" {
-  description = "The name of the ECS service"
-  value       = aws_ecs_service.main.name
-}
-
-output "ecs_cluster_name" {
-  description = "The name of the ECS cluster"
-  value       = aws_ecs_cluster.main.name
-}
 
 resource "aws_lb" "main" {
   name               = "hello-world-lb"
@@ -165,4 +156,18 @@ resource "aws_lb_listener" "http" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.main.arn
   }
+}
+output "ecs_service_name" {
+  description = "The name of the ECS service"
+  value       = aws_ecs_service.main.name
+}
+
+output "ecs_cluster_name" {
+  description = "The name of the ECS cluster"
+  value       = aws_ecs_cluster.main.name
+}
+
+output "load_balancer_dns" {
+  description = "The DNS name of the load balancer"
+  value       = aws_lb.main.dns_name
 }
