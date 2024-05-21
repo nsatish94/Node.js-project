@@ -1,6 +1,11 @@
 provider "aws" {
   region = "us-east-1"
+  access_key = var.aws_access_key
+  secret_key = var.aws_secret_key
 }
+
+variable "aws_access_key" {}
+variable "aws_secret_key" {}
 
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
@@ -36,15 +41,15 @@ resource "aws_ecs_cluster" "main" {
 resource "aws_iam_role" "ecs_task_execution" {
   name = "ecsTaskExecutionRole"
   assume_role_policy = jsonencode({
-    Version = "2012-10-17"
+    Version = "2012-10-17",
     Statement = [
       {
-        Effect = "Allow"
+        Effect = "Allow",
         Principal = {
           Service = "ecs-tasks.amazonaws.com"
-        }
+        },
         Action = "sts:AssumeRole"
-      },
+      }
     ]
   })
 }
@@ -64,21 +69,16 @@ resource "aws_ecs_task_definition" "hello_world" {
   requires_compatibilities = ["FARGATE"]
   cpu                      = 256
   memory                   = 512
+  execution_role_arn       = aws_iam_role.ecs_task_execution.arn
 
-  execution_role_arn = aws_iam_role.ecs_task_execution.arn
-
-  container_definitions = jsonencode([
-    {
-      name  = "hello-world"
-      image = "${191545124512.dkr.ecr.us-east-1.amazonaws.com/hello-world:latest}"
-      portMappings = [
-        {
-          containerPort = 3000
-          hostPort      = 3000
-        },
-      ]
-    }
-  ])
+  container_definitions = jsonencode([{
+    name  = "hello-world"
+    image = "${191545124512.dkr.ecr.us-east-1.amazonaws.com/hello-world:latest}"
+    portMappings = [{
+      containerPort = 3000
+      hostPort      = 3000
+    }]
+  }])
 }
 
 resource "aws_ecs_service" "main" {
@@ -91,12 +91,6 @@ resource "aws_ecs_service" "main" {
   network_configuration {
     subnets         = [aws_subnet.main.id]
     security_groups = [aws_security_group.ecs_sg.id]
-  }
-
-  load_balancer {
-    target_group_arn = aws_lb_target_group.main.arn
-    container_name   = "hello-world"
-    container_port   = 3000
   }
 }
 
@@ -126,4 +120,3 @@ resource "aws_lb_listener" "http" {
     target_group_arn = aws_lb_target_group.main.arn
   }
 }
-
