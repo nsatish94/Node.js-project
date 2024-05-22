@@ -57,7 +57,7 @@ resource "aws_security_group" "ecs_sg" {
 
   ingress {
     from_port   = 80
-    to_port     = 80
+    to_port     = 3000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -111,7 +111,7 @@ resource "aws_ecs_task_definition" "hello_world" {
     name  = "hello-world"
     image = "${aws_ecr_repository.hello_world.repository_url}:latest"
     portMappings = [{
-      containerPort = 80
+      containerPort = 3000
       hostPort      = 80
     }]
   }])
@@ -130,7 +130,7 @@ resource "aws_ecs_service" "hello_world_service" {
   load_balancer {
     target_group_arn = aws_lb_target_group.main.arn
     container_name   = "hello-world"
-    container_port   = 80
+    container_port   = 3000
   }
   depends_on = [
     aws_lb_listener.http
@@ -155,7 +155,7 @@ resource "aws_lb_target_group" "main" {
 
   health_check {
     path = "/"
-    port = "80"
+    port = "3000"
   }
 }
 
