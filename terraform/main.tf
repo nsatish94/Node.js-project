@@ -117,12 +117,13 @@ resource "aws_ecs_task_definition" "hello_world" {
   }])
 }
 
-resource "aws_ecs_service" "main" {
+resource "aws_ecs_service" "hello_world_service" {
   name            = "hello-world-service"
-  cluster         = aws_ecs_cluster.main.id
-  task_definition = aws_ecs_task_definition.hello_world.arn
+  cluster         = aws_ecs_cluster.hello_world_cluster.id
+  task_definition = aws_ecs_task_definition.hello_world_task.arn
   desired_count   = 1
   launch_type     = "FARGATE"
+
 
   network_configuration {
     subnets         = [aws_subnet.subnet1.id, aws_subnet.subnet2.id]
