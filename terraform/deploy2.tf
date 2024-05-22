@@ -56,8 +56,8 @@ resource "aws_security_group" "ecs_sg" {
   vpc_id = aws_vpc.main.id
 
   ingress {
-    from_port   = 3000
-    to_port     = 3000
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -111,8 +111,8 @@ resource "aws_ecs_task_definition" "hello_world" {
     name  = "hello-world"
     image = "${aws_ecr_repository.hello_world.repository_url}:latest"
     portMappings = [{
-      containerPort = 3000
-      hostPort      = 3000
+      containerPort = 80
+      hostPort      = 80
     }]
   }])
 }
@@ -123,17 +123,14 @@ resource "aws_ecs_service" "hello_world_service" {
   task_definition = "arn:aws:ecs:us-east-1:191545124512:task-definition/hello-world-task:3"
   desired_count   = 1
   launch_type     = "FARGATE"
-
-
   network_configuration {
     subnets         = [aws_subnet.subnet1.id, aws_subnet.subnet2.id]
     security_groups = [aws_security_group.ecs_sg.id]
   }
-
   load_balancer {
     target_group_arn = aws_lb_target_group.main.arn
     container_name   = "hello-world"
-    container_port   = 3000
+    container_port   = 80
   }
   depends_on = [
     aws_lb_listener.http
@@ -158,7 +155,7 @@ resource "aws_lb_target_group" "main" {
 
   health_check {
     path = "/"
-    port = "3000"
+    port = "80"
   }
 }
 
