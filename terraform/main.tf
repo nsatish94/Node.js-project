@@ -109,7 +109,7 @@ resource "aws_ecs_task_definition" "hello_world" {
 
   container_definitions = jsonencode([{
     name  = "hello-world"
-    image = "191545124512.dkr.ecr.us-east-1.amazonaws.com/hello-world"
+    image = "${aws_ecr_repository.hello_world.repository_url}:latest"
     portMappings = [{
       containerPort = 3000
       hostPort      = 3000
@@ -135,6 +135,9 @@ resource "aws_ecs_service" "hello_world_service" {
     container_name   = "hello-world"
     container_port   = 3000
   }
+  depends_on = [
+    aws_lb_listener.http
+  ]
 }
 
 
