@@ -70,7 +70,7 @@ resource "aws_security_group" "ecs_sg" {
   }
 }
 
-resource "aws_ecs_cluster" "main" {
+resource "aws_ecs_cluster" "hello_world_cluster" {
   name = "hello-world-cluster"
 }
 
