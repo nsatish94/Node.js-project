@@ -44,8 +44,8 @@ jobs:
 
       - name: Deploy to ECS
         env:
-        AWS_REGION: us-east-1
-        ECS_CLUSTER: hello-world-cluster
-        ECS_SERVICE: hello-world-service
+          AWS_REGION: us-east-1
+          ECS_CLUSTER: hello-world-cluster
+          ECS_SERVICE: hello-world-service
         run: |
           aws ecs update-service --cluster hello-world-cluster --service hello-world-service --force-new-deployment
