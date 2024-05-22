@@ -96,7 +96,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy" {
 }
 
 resource "aws_ecr_repository" "hello_world" {
-  name = "hello-world-repo"
+  name = "hello-world"
 }
 
 resource "aws_ecs_task_definition" "hello_world" {
