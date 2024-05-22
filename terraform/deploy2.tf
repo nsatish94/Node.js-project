@@ -174,12 +174,12 @@ resource "aws_lb_listener" "http" {
 }
 output "ecs_service_name" {
   description = "The name of the ECS service"
-  value       = aws_ecs_service.main.name
+  value       = aws_ecs_service.hello_world_service.name
 }
 
 output "ecs_cluster_name" {
   description = "The name of the ECS cluster"
-  value       = aws_ecs_cluster.main.name
+  value       =  aws_ecs_cluster.hello_world_cluster.name
 }
 
 output "load_balancer_dns" {
