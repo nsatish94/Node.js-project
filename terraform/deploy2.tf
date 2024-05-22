@@ -56,7 +56,7 @@ resource "aws_security_group" "ecs_sg" {
   vpc_id = aws_vpc.main.id
 
   ingress {
-    from_port   = 80
+    from_port   = 3000
     to_port     = 3000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
@@ -112,7 +112,7 @@ resource "aws_ecs_task_definition" "hello_world" {
     image = "${aws_ecr_repository.hello_world.repository_url}:latest"
     portMappings = [{
       containerPort = 3000
-      hostPort      = 80
+      hostPort      = 3000
     }]
   }])
 }
@@ -148,7 +148,7 @@ resource "aws_lb" "main" {
 
 resource "aws_lb_target_group" "main" {
   name     = "hello-world-tg"
-  port     = 80
+  port     = 3000
   protocol = "HTTP"
   vpc_id   = aws_vpc.main.id
   target_type = "ip"
