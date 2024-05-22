@@ -120,7 +120,7 @@ resource "aws_ecs_task_definition" "hello_world" {
 resource "aws_ecs_service" "hello_world_service" {
   name            = "hello-world-service"
   cluster         = aws_ecs_cluster.hello_world_cluster.id
-  task_definition = arn:aws:ecs:us-east-1:191545124512:task-definition/hello-world-task:3
+  task_definition = "arn:aws:ecs:us-east-1:191545124512:task-definition/hello-world-task:3"
   desired_count   = 1
   launch_type     = "FARGATE"
 
