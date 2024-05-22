@@ -56,8 +56,8 @@ resource "aws_security_group" "ecs_sg" {
   vpc_id = aws_vpc.main.id
 
   ingress {
-    from_port   = 80
-    to_port     = 80
+    from_port   = 3000
+    to_port     = 3000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -128,6 +128,12 @@ resource "aws_ecs_service" "main" {
     subnets         = [aws_subnet.subnet1.id, aws_subnet.subnet2.id]
     security_groups = [aws_security_group.ecs_sg.id]
   }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.main.arn
+    container_name   = "hello-world"
+    container_port   = 3000
+  }
 }
 
 
@@ -145,6 +151,10 @@ resource "aws_lb_target_group" "main" {
   protocol = "HTTP"
   vpc_id   = aws_vpc.main.id
   target_type = "ip"
+
+  health_check {
+  path = "/"
+  port = "3000"
 }
 
 resource "aws_lb_listener" "http" {
